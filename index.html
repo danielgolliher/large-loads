@@ -42,6 +42,7 @@
   --ink-3: #8ea3d4;
   --rule: rgba(234, 241, 255, 0.2);
   --rule-2: rgba(234, 241, 255, 0.075);
+  --grid: rgba(234, 241, 255, 0.032);
   --signal: #ffc933;
   --signal-edge: #ffc933;
   --on-signal: #17130a;
@@ -85,11 +86,12 @@
   --ink-3: #56699d;
   --rule: rgba(18, 48, 111, 0.22);
   --rule-2: rgba(18, 48, 111, 0.075);
+  --grid: rgba(18, 48, 111, 0.04);
   --signal: #f7c21a;
-  --signal-edge: #b48600;
+  --signal-edge: #8a6400;
   --on-signal: #17130a;
-  --tx: #d4561c;
-  --ny: #0f8f7a;
+  --tx: #b04210;
+  --ny: #0b7563;
   --shed: #c8312f;
   --glow: #f7c21a;
   --dark-win: #c9d3ea;
@@ -110,6 +112,11 @@ html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 16px)
 body {
   margin: 0;
   background-color: var(--ground);
+  /* the drafting grid, kept faint so it reads as paper rather than as lines */
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--step-0);
@@ -191,7 +198,7 @@ em { font-style: italic; }
 .sheet { position: relative; padding-block: clamp(72px, 10vw, 136px) 0; }
 .sheet + .sheet { border-top: 1px solid var(--rule-2); }
 .sheet-head { max-width: var(--page); margin: 0 auto clamp(28px, 4vw, 48px); }
-.sheet-head h2 { font-size: var(--step-3); font-weight: 850; max-width: 18ch; }
+.sheet-head h2 { font-size: clamp(2rem, 1.6rem + 1.8vw, 3rem); font-weight: 850; max-width: 18ch; }
 
 .prose { max-width: var(--page); margin: 0 auto; display: flex; flex-direction: column; gap: 1.1em; }
 .prose > * { max-width: var(--measure); }
@@ -199,7 +206,7 @@ em { font-style: italic; }
 .prose blockquote { margin: 0; padding: 4px 0 4px 20px; border-left: 2px solid var(--ink-3); color: var(--ink-2); font-style: italic; }
 .prose .cite { display: block; margin-top: 6px; font-style: normal; font-family: var(--font-display); font-size: 0.82rem; color: var(--ink-3); }
 .lede { font-size: var(--step-1); line-height: 1.45; }
-.fn { font-family: var(--font-display); font-size: 0.7em; vertical-align: super; line-height: 0; text-decoration: none; color: var(--ink-3); padding: 0 1px; }
+.fn { font-family: var(--font-display); font-size: 0.75em; vertical-align: super; line-height: 0; text-decoration: none; color: var(--ink-3); padding: 0 1px; }
 
 /* Glossary terms */
 .term {
@@ -284,6 +291,7 @@ em { font-style: italic; }
 /* ---------- Controls ---------- */
 .ctl { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .ctl > .label { color: var(--ink-3); }
+.ctl > .seg { align-self: flex-start; }
 .seg { display: inline-flex; border: 1px solid var(--rule); flex-wrap: wrap; }
 .seg button {
   appearance: none; border: 0; background: transparent; color: var(--ink-2); cursor: pointer; padding: 7px 12px 6px;
@@ -302,7 +310,8 @@ em { font-style: italic; }
 .toggle:hover { color: var(--ink); }
 .stepper { display: inline-flex; align-items: center; border: 1px solid var(--rule); }
 .stepper button { appearance: none; border: 0; background: transparent; color: var(--ink); width: 34px; height: 34px; cursor: pointer; font-family: var(--font-display); font-size: 1.1rem; }
-.stepper button:hover { background: var(--rule-2); }
+.stepper button:hover:not(:disabled) { background: var(--rule-2); }
+.stepper button:disabled { color: var(--ink-3); opacity: 0.45; cursor: default; }
 .stepper output { min-width: 34px; text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; border-left: 1px solid var(--rule); border-right: 1px solid var(--rule); height: 32px; line-height: 32px; }
 input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; height: 28px; margin: 0; cursor: pointer; }
 input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: var(--ink-3); }
@@ -384,7 +393,7 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; background: v
 .dio-label.q { background: var(--signal); color: var(--on-signal); border-color: var(--signal); font-weight: 700; font-size: 0.76rem; letter-spacing: 0.01em; text-transform: none; white-space: normal; width: max-content; max-width: 150px; text-align: center; line-height: 1.3; }
 .dio-label.below { transform: translate(-50%, 10px); }
 .dio-label.dc-tag { background: var(--signal); color: var(--on-signal); border-color: var(--on-signal); font-weight: 700; }
-.dio-label.shed-tag { background: var(--shed); color: #fff; border-color: var(--shed); font-weight: 700; }
+.dio-label.shed-tag { background: var(--shed); color: var(--on-signal); border-color: var(--shed); font-weight: 700; }
 
 .hud { position: absolute; left: 14px; top: 12px; right: 14px; display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-start; pointer-events: none; z-index: 2; }
 .meter { min-width: 220px; flex: 1; max-width: 360px; background: color-mix(in srgb, var(--ground-2) 88%, transparent); padding: 8px 10px 10px; transition: opacity 0.5s; }
@@ -425,7 +434,10 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; background: v
 .ruler .t-big { font-family: var(--font-display); fill: var(--ink); }
 /* the range input is invisible; the diamond on the ruler is its thumb */
 .ruler-box input[type="range"] { position: absolute; margin: 0; opacity: 0; cursor: ew-resize; z-index: 2; }
+.ruler text.thr { paint-order: stroke; stroke: var(--ground-2); stroke-width: 5px; stroke-linejoin: round; }
+.tt-mk__halo { fill: color-mix(in srgb, var(--signal) 22%, transparent); stroke: var(--signal); stroke-width: 1; stroke-opacity: 0.6; }
 .tt-mk.is-focus .tt-mk__dia { stroke: var(--ink); stroke-width: 3; }
+.ruler-box input[type="range"]:active { cursor: grabbing; }
 .verdicts { display: grid; grid-template-columns: 1fr 1fr; gap: 0 clamp(20px, 4vw, 48px); padding: 8px 16px 22px; }
 .verdict { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .verdict .st { font-family: var(--font-display); font-weight: 850; font-size: 1rem; letter-spacing: 0.01em; }
@@ -454,6 +466,7 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; background: v
 .bar-track { position: relative; height: 34px; }
 .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; transition: width 1.1s cubic-bezier(.2,.7,.2,1); }
 .bar-fill--real { background: var(--ink-2); }
+.bar-row--ll .bar-fill--real { background: var(--signal); }
 .bar-fill--req { background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--signal) 85%, transparent) 0 6px, color-mix(in srgb, var(--signal) 55%, transparent) 6px 12px); outline: 1px solid var(--signal-edge); outline-offset: -1px; }
 .bar-val { position: absolute; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; white-space: nowrap; padding-left: 10px; }
 .bar-val.inside { transform: translate(-100%, -50%); padding: 0 10px 0 0; color: var(--on-signal); }
@@ -473,6 +486,7 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; background: v
 .ph-svg .t-ink, .hw-svg .t-ink, .cost-svg .t-ink, .hydro-svg .t-ink { fill: var(--ink); }
 .ph-svg .t-muted, .hw-svg .t-muted, .cost-svg .t-muted, .hydro-svg .t-muted { fill: var(--ink-3); }
 .ph-svg .t-on-signal, .cost-svg .t-on-signal, .hydro-svg .t-on-signal { fill: var(--on-signal); }
+.ph-svg text.t-muted { paint-order: stroke; stroke: var(--ground-2); stroke-width: 4px; stroke-linejoin: round; }
 .ph-proj { transition: opacity 0.5s, transform 0.5s; }
 .ph-proj rect { fill: var(--signal); stroke: var(--signal-edge); }
 .ph-proj.spec rect { fill: var(--ground-2); stroke: var(--signal); stroke-dasharray: 3 3; }
@@ -524,13 +538,13 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; background: v
 }
 .hydro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .hydro > * { min-width: 0; }
-.hydro-scene { position: relative; min-height: 380px; }
+.hydro-scene { position: relative; min-height: 460px; }
 .hydro-side { padding: 18px; display: flex; flex-direction: column; gap: 16px; }
 .bill { display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; font-family: var(--font-display); font-size: 0.95rem; align-items: baseline; }
 .bill .k { color: var(--ink-3); font-size: 0.85rem; }
 .bill .v { font-variant-numeric: tabular-nums; text-align: right; }
 .bill .tot { font-family: var(--font-display); font-size: 1.6rem; font-weight: 850; }
-.bill .delta { font-size: 0.95rem; font-weight: 700; }
+.bill .delta { font-size: 1.25rem; font-weight: 850; }
 .bill .delta.up { color: var(--shed); }
 @media (max-width: 760px) {
   .hydro { grid-template-columns: 1fr; }
@@ -538,7 +552,8 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; background: v
 }
 
 /* Deep dive */
-details.deep { background: var(--ground-2); }
+details.deep { background: var(--ground-2); max-width: 860px; }
+details.deep .deep__body > p { max-width: var(--measure); }
 details.deep > summary { cursor: pointer; padding: 14px 18px; display: flex; gap: 12px; align-items: center; list-style: none; font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; }
 details.deep > summary::-webkit-details-marker { display: none; }
 details.deep > summary::after { content: "+"; margin-left: auto; font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; line-height: 1; color: var(--ink-3); }
@@ -725,10 +740,10 @@ details.deep .deep__body { padding: 0 18px 20px; display: flex; flex-direction: 
 /* ---------- Phone overrides (kept last so they win the cascade) ---------- */
 @media (max-width: 900px) {
   .readout .v { font-size: 1.2rem; white-space: nowrap; }
-  .readout .label { font-size: 0.72rem; line-height: 1.25; }
+  .readout .label { font-size: 0.75rem; line-height: 1.25; }
   .fig-frame__foot:not([data-readouts]) { flex-wrap: wrap; overflow: visible; }
-  .dio-label { font-size: 0.66rem; padding: 2px 5px 1px; letter-spacing: 0.04em; }
-  .dio-label.q { font-size: 0.68rem; max-width: 120px; }
+  .dio-label { font-size: 0.75rem; padding: 2px 5px 1px; letter-spacing: 0.03em; }
+  .dio-label.q { font-size: 0.75rem; max-width: 124px; }
   .meter__row, .meter__slack { font-size: 0.72rem; }
   .meter__row b { font-size: 1rem; }
   .meter__bar { margin-top: 4px; height: 9px; }
@@ -854,7 +869,7 @@ details.deep .deep__body { padding: 0 18px 20px; display: flex; flex-direction: 
         </div>
       </div>
     </div>
-    <p class="figure__src">Facility sizes are illustrative. The scale is logarithmic: each labeled tick is 10× the one before. Stargate: the OpenAI, Oracle, and Crusoe campus in Abilene, Texas, planned at 1.2 GW. Peaks: <a href="https://www.nyiso.com/documents/d/guest/2026-power-trends">NYISO</a> 33,956 MW (July 19, 2013); <a href="https://www.ercot.com/static-assets/data/news/content/a-peak-demand/2026/all-time-records.htm">ERCOT</a> 91,134 MW (July 22, 2026, unofficial). Homes: <a href="https://www.eia.gov/electricity/data/eia861/">EIA</a> 2025 New York average of 586 kWh a month, about 0.8 kW of average draw. EO 62 holds state (DEC) permits only; <a href="https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops">it does not apply to local permits</a>.</p>
+    <p class="figure__src">Facility sizes are illustrative. Stargate: the OpenAI, Oracle, and Crusoe campus in Abilene, Texas, planned at 1.2 GW. Peaks: <a href="https://www.nyiso.com/documents/d/guest/2026-power-trends">NYISO</a> 33,956 MW (July 19, 2013); <a href="https://www.ercot.com/static-assets/data/news/content/a-peak-demand/2026/all-time-records.htm">ERCOT</a> 91,134 MW (July 22, 2026, unofficial). Homes: <a href="https://www.eia.gov/electricity/data/eia861/">EIA</a> 2025 New York average of 586 kWh a month, about 0.8 kW of average draw. EO 62 holds state (DEC) permits only; <a href="https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops">it does not apply to local permits</a>.</p>
   </div>
   <div class="prose">
     <p>Because data centers need so much power, they fall under most jurisdictions’ definitions. And because they are the most common kind of large load asking to connect to most grids, people use “data center” and “large load” almost interchangeably. This guide does too.</p>
@@ -866,9 +881,6 @@ details.deep .deep__body { padding: 0 18px 20px; display: flex; flex-direction: 
 
 
   <div class="prose">
-    <aside class="trip">
-      <p><strong>The two lines aren’t the same kind of rule.</strong> Crossing Texas’s 75 MW line means a customer must meet a set of standards to connect, whatever kind of facility it is. Crossing New York’s 50 MW line, if you are a data center, means the state holds your environmental permit applications until it finishes writing new standards. Same unit, very different consequences.</p>
-    </aside>
   </div>
 </section>
 
@@ -956,15 +968,15 @@ details.deep .deep__body { padding: 0 18px 20px; display: flex; flex-direction: 
         <span class="label">Texas · ERCOT</span>
         <div class="bar-row" data-v="474000"><div class="name">Large loads asking to connect<small>June 2026 · ~90% data centers</small></div><div class="bar-track"><div class="bar-fill bar-fill--req"></div><span class="bar-val">474,000 MW</span></div></div>
         <div class="bar-row" data-v="91134"><div class="name">Texas’s all-time peak demand<small>July 22, 2026 · unofficial</small></div><div class="bar-track"><div class="bar-fill bar-fill--real"></div><span class="bar-val">91,134 MW</span></div></div>
-        <div class="bar-row" data-v="9456"><div class="name">Large loads approved to energize<small>August 2026</small></div><div class="bar-track"><div class="bar-fill bar-fill--real"></div><span class="bar-val">9,456 MW</span></div></div>
-        <div class="bar-row" data-v="4316"><div class="name">What they actually drew at peak<small>August 2026</small></div><div class="bar-track"><div class="bar-fill bar-fill--real"></div><span class="bar-val">4,316 MW</span></div></div>
+        <div class="bar-row bar-row--ll" data-v="9456"><div class="name">Large loads approved to energize<small>August 2026</small></div><div class="bar-track"><div class="bar-fill bar-fill--real"></div><span class="bar-val">9,456 MW</span></div></div>
+        <div class="bar-row bar-row--ll" data-v="4316"><div class="name">What they actually drew at peak<small>August 2026</small></div><div class="bar-track"><div class="bar-fill bar-fill--real"></div><span class="bar-val">4,316 MW</span></div></div>
         <div class="bar-axis"><div></div><div class="ticks"></div></div>
       </div>
       <div class="bars" data-max="40000" data-ticks="0,10000,20000,30000,40000" style="border-top:1px solid var(--rule)">
         <span class="label">New York · NYISO</span>
         <div class="bar-row" data-v="12670"><div class="name">Large loads in NYISO’s queue<small>May 1, 2026 · 51 projects</small></div><div class="bar-track"><div class="bar-fill bar-fill--req"></div><span class="bar-val">12,670 MW</span></div></div>
         <div class="bar-row" data-v="33956"><div class="name">New York’s all-time peak demand<small>July 19, 2013</small></div><div class="bar-track"><div class="bar-fill bar-fill--real"></div><span class="bar-val">33,956 MW</span></div></div>
-        <div class="bar-row" data-v="2880"><div class="name">Large-load demand NYISO expects by 2040<small>Power Trends 2026 forecast</small></div><div class="bar-track"><div class="bar-fill bar-fill--real"></div><span class="bar-val">2,880 MW</span></div></div>
+        <div class="bar-row bar-row--ll" data-v="2880"><div class="name">Large-load demand NYISO expects by 2040<small>Power Trends 2026 forecast</small></div><div class="bar-track"><div class="bar-fill bar-fill--real"></div><span class="bar-val">2,880 MW</span></div></div>
         <div class="bar-axis"><div></div><div class="ticks"></div></div>
       </div>
     </div>
@@ -1082,7 +1094,7 @@ details.deep .deep__body { padding: 0 18px 20px; display: flex; flex-direction: 
     <p>Texas’s SB6 also tells its regulator to re-examine how transmission costs get split up in the first place.</p>
     <div class="decoder">
       <div class="decoder__top"><span><b>Texas SB6</b> · §6</span></div>
-      <div class="decoder__text">SECTION 6. (a) The Public Utility Commission of Texas shall evaluate whether the existing <mark data-gloss="How Texas splits the bill for high-voltage lines among the local utilities that deliver power. This is where 4CP lives; see below.">methodology used to charge wholesale transmission costs to distribution providers</mark> under Section 35.004(d), Utilities Code, <mark data-gloss="Is the old formula still fair now that huge new loads are arriving?">continues to appropriately assign costs for transmission investment</mark>…(b) The Public Utility Commission of Texas shall evaluate whether the commission’s <mark data-gloss="How utilities set the rates customers actually see on their bills.">retail ratemaking practices</mark> ensure that transmission cost recovery appropriately charges the <mark data-gloss="Cost causation: whoever causes a cost should pay for it. Customer classes are groups like residential, commercial, and industrial.">system costs that are caused by each customer class</mark>.</div>
+      <div class="decoder__text">SECTION 6. (a) The Public Utility Commission of Texas shall evaluate whether the existing <mark data-gloss="How Texas splits the bill for high-voltage lines among the local utilities that deliver power. ">methodology used to charge wholesale transmission costs to distribution providers</mark> under Section 35.004(d), Utilities Code, <mark data-gloss="Is the old formula still fair now that huge new loads are arriving?">continues to appropriately assign costs for transmission investment</mark>…(b) The Public Utility Commission of Texas shall evaluate whether the commission’s <mark data-gloss="How utilities set the rates customers actually see on their bills.">retail ratemaking practices</mark> ensure that transmission cost recovery appropriately charges the <mark data-gloss="Cost causation: whoever causes a cost should pay for it. Customer classes are groups like residential, commercial, and industrial.">system costs that are caused by each customer class</mark>.</div>
       <div class="decoder__gloss"><p></p></div>
     </div>
 
@@ -1171,7 +1183,7 @@ details.deep .deep__body { padding: 0 18px 20px; display: flex; flex-direction: 
         <button class="chip" type="button" data-f="phantom" aria-pressed="false"><b>Phantom loads</b></button>
         <button class="chip" type="button" data-f="stress" aria-pressed="false"><b>Grid stress</b></button>
         <button class="chip" type="button" data-f="cost" aria-pressed="false"><b>Who pays</b></button>
-        <button class="chip" type="button" data-f="ny" aria-pressed="false"><b>New York’s own goals</b></button>
+        <button class="chip" type="button" data-f="ny" aria-pressed="false"><b>Process, climate, heat</b></button>
       </div>
       <div class="qx__list">
         <div class="qcard" id="q1" data-tags="phantom"><div class="qcard__n"><span class="n">1</span><span class="qtag t-phantom">Phantom loads</span></div><p class="qcard__plain">Which requests are real, and how do we check before we plan around them?</p><p class="qcard__official">How can large load demand be accurately forecasted and verified before being included in long-term load forecasts and system planning studies?</p></div>
@@ -1364,7 +1376,8 @@ var LL = window.LL || (window.LL = {});
     var out = LL.h('output', { id: id, 'aria-live': 'polite' }, st, String(value));
     var plus = LL.h('button', { type: 'button', 'aria-label': 'More', id: id + '-inc' }, st, '+');
     var v = value;
-    function set(n) { v = Math.max(min, Math.min(max, n)); out.textContent = String(v); }
+    function set(n) { v = Math.max(min, Math.min(max, n)); out.textContent = String(v); minus.disabled = v <= min; plus.disabled = v >= max; }
+    set(v);
     minus.addEventListener('click', function () { set(v - 1); onChange(v); });
     plus.addEventListener('click', function () { set(v + 1); onChange(v); });
     return { el: wrap, set: set };
@@ -1819,7 +1832,7 @@ LL.TIMELINE = [
   { st: 'ny', d: '2026-04-13', label: 'Apr 13, 2026', t: 'Initial comments due', lane: 2 },
   { st: 'ny', d: '2026-05-13', label: 'May 13, 2026', t: 'Reply comments due', lane: 0 },
   { st: 'ny', d: '2026-07-14', label: 'Jul 14, 2026', t: 'EO 62 moratorium signed', lane: 1 },
-  { st: 'ny', d: '2026-09-18', label: 'Sep 18, 2026', t: 'Draft scope for data center environmental review', lane: 0, since: true },
+  { st: 'ny', d: '2026-09-18', label: 'Sep 18, 2026', t: 'Draft scope for the environmental review', lane: 0, since: true, side: 'right' },
   { st: 'ny', d: '2026-12-31', label: 'By end of 2026', t: 'DPS technical conference', lane: 1 },
   { st: 'ny', d: '2027-02-12', label: 'By Feb 2027', t: 'White paper with recommendations', lane: 2 }
 ];
@@ -1885,6 +1898,7 @@ LL.Threshold = function (root) {
   var chips = root.querySelector('.tt__chips');
   this.chipEls = this.FAC.map(function (f) {
     var b = LL.h('button', { type: 'button', 'class': 'chip', 'aria-pressed': String(f === self.sel), id: 'tt-' + f.id }, chips, '<b>' + f.name + '</b><span>' + LL.fmt(f.mw) + ' MW</span>');
+    b._mw = b.querySelector('span');
     b.addEventListener('click', function () { self.pick(f); });
     return b;
   });
@@ -1894,7 +1908,12 @@ LL.Threshold = function (root) {
     tx: { call: root.querySelector('[data-tx-call]'), why: root.querySelector('[data-tx-why]') },
     ny: { call: root.querySelector('[data-ny-call]'), why: root.querySelector('[data-ny-why]') }
   };
-  this.range.addEventListener('input', function () { self.mw = self.fromSlider(+self.range.value); self.update(true); });
+  // dragging resizes the selected facility, so its chip shows the size it now has
+  this.range.addEventListener('input', function () {
+    self.mw = self.fromSlider(+self.range.value);
+    self.chipEls[self.FAC.indexOf(self.sel)]._mw.textContent = LL.fmt(self.mw) + ' MW';
+    self.update(true);
+  });
   this.range.addEventListener('focus', function () { if (self.mk) self.mk.classList.add('is-focus'); });
   this.range.addEventListener('blur', function () { if (self.mk) self.mk.classList.remove('is-focus'); });
   LL.onLayout(this.rulerHost, 600, function (narrow) { self.build(narrow); });
@@ -1910,34 +1929,38 @@ LL.Threshold.prototype.fromSlider = function (v) {
 LL.Threshold.prototype.toSlider = function (mw) { return Math.round(Math.log10(mw) / Math.log10(3000) * 1000); };
 LL.Threshold.prototype.pick = function (f) {
   this.sel = f; this.mw = f.mw;
-  this.chipEls.forEach(function (c, i) { c.setAttribute('aria-pressed', String(this.FAC[i] === f)); }, this);
+  this.chipEls.forEach(function (c, i) { c.setAttribute('aria-pressed', String(this.FAC[i] === f)); c._mw.textContent = LL.fmt(this.FAC[i].mw) + ' MW'; }, this);
   this.range.value = this.toSlider(f.mw);
   this.update();
 };
 LL.Threshold.prototype.build = function (narrow) {
   var self = this;
   this.rulerHost.innerHTML = '';
-  var W = narrow ? 350 : 900, H = narrow ? 200 : 180, x0 = 14, x1 = W - 14, base = narrow ? 92 : 86;
+  var W = narrow ? 350 : 900, H = narrow ? 206 : 186, x0 = 14, x1 = W - 14, base = narrow ? 98 : 92;
   var box = LL.h('div', { 'class': 'ruler-box' }, this.rulerHost);
   var svg = LL.s('svg', { 'class': 'ruler', viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Logarithmic scale of power demand from 1 megawatt to 100,000 megawatts, marking New York’s 50 MW line, Texas’s 75 MW line, and reference points.' }, box);
   var X = function (mw) { return x0 + (x1 - x0) * self.toFrac(mw); };
   this.X = X;
   LL.s('rect', { x: x0, y: base - 8, width: x1 - x0, height: 16, fill: 'var(--surface)', stroke: 'var(--rule)' }, svg);
+  // the span the marker can be dragged across, 1 to 3,000 MW
+  LL.s('rect', { x: x0, y: base - 8, width: X(3000) - x0, height: 16, fill: 'color-mix(in srgb, var(--signal) 14%, transparent)' }, svg);
+  LL.s('line', { x1: X(3000), x2: X(3000), y1: base - 11, y2: base + 11, stroke: 'var(--signal-edge)', 'stroke-width': 1.5 }, svg);
   for (var d = 0; d <= 5; d++) {
     for (var k = 1; k < 10; k++) {
       var v = Math.pow(10, d) * k;
       if (v > this.HI) break;
       var x = X(v), major = k === 1;
       LL.s('line', { x1: x, x2: x, y1: base - 8, y2: base - 8 + (major ? 16 : 6), stroke: 'var(--ink-3)', 'stroke-width': major ? 1.2 : 0.7 }, svg);
-      if (major) LL.s('text', { x: x, y: base + 24, 'text-anchor': d === 0 ? 'start' : (d === 5 ? 'end' : 'middle'), 'font-size': narrow ? 12 : 11.5 }, svg, (narrow ? ['1', '10', '100', '1k', '10k', '100k'][d] : LL.fmt(v) + (d === 5 ? ' MW' : '')));
+      if (major) LL.s('text', { x: x, y: base + 24, 'text-anchor': d === 0 ? 'start' : (d === 5 ? 'end' : 'middle'), 'font-size': narrow ? 13 : 12 }, svg, (narrow ? ['1', '10', '100', '1k', '10k', '100k'][d] : LL.fmt(v) + (d === 5 ? ' MW' : '')));
     }
   }
   // threshold lines
+  var thr = [];
   [[50, 'var(--ny)', 'NY · 50 MW', -1], [75, 'var(--tx)', 'TX · 75 MW', 1]].forEach(function (t) {
     var x = X(t[0]);
     LL.s('line', { x1: x, x2: x, y1: base - 30, y2: base + 12, stroke: t[1], 'stroke-width': 2 }, svg);
     var y = base - 34;
-    LL.s('text', { x: x + (t[3] < 0 ? -4 : 4), y: y, 'text-anchor': t[3] < 0 ? 'end' : 'start', 'font-size': narrow ? 12.5 : 12, fill: t[1], 'font-weight': 700, style: 'fill:' + t[1] }, svg, t[2]);
+    thr.push(LL.s('text', { 'class': 'thr', x: x + (t[3] < 0 ? -4 : 4), y: y, 'text-anchor': t[3] < 0 ? 'end' : 'start', 'font-size': narrow ? 13 : 12.5, fill: t[1], 'font-weight': 700, style: 'fill:' + t[1] }, svg, t[2]));
   });
   // reference marks
   var refs = narrow ? [[1200, 'Stargate, Abilene'], [33956, 'NY record peak'], [91134, 'Texas record peak']] : [[1200, 'Stargate campus, Abilene TX'], [33956, 'All of New York, record peak'], [91134, 'All of Texas (ERCOT), record']];
@@ -1945,15 +1968,17 @@ LL.Threshold.prototype.build = function (narrow) {
     var x = X(r[0]);
     var ly = base + 52 + i * (narrow ? 17 : 15);
     LL.s('line', { x1: x, x2: x, y1: base + 28, y2: ly + 2, stroke: 'var(--ink-3)', 'stroke-dasharray': '2 2' }, svg);
-    LL.s('text', { x: x - 5, y: ly, 'text-anchor': 'end', 'font-size': narrow ? 12 : 11, style: 'fill:var(--ink-2)' }, svg, r[1]);
+    LL.s('text', { x: x - 5, y: ly, 'text-anchor': 'end', 'font-size': narrow ? 13 : 12, style: 'fill:var(--ink-2)' }, svg, r[1]);
   });
   // marker
   var mk = this.mk = LL.s('g', { 'class': 'tt-mk' }, svg);
   LL.s('line', { x1: 0, x2: 0, y1: base - 50, y2: base, stroke: 'var(--signal)', 'stroke-width': 2 }, mk);
+  LL.s('circle', { 'class': 'tt-mk__halo', cx: 0, cy: base, r: 17 }, mk);
   LL.s('rect', { 'class': 'tt-mk__dia', x: -8, y: base - 8, width: 16, height: 16, fill: 'var(--signal)', stroke: 'var(--on-signal)', 'stroke-width': 1.5, transform: 'rotate(45 0 ' + base + ')' }, mk);
-  this.mkText = LL.s('text', { x: 0, y: base - 69, 'text-anchor': 'middle', 'font-size': narrow ? 17 : 16, 'font-weight': 800, 'class': 't-big' }, mk, '');
-  this.mkHomes = LL.s('text', { x: 0, y: base - 54, 'text-anchor': 'middle', 'font-size': narrow ? 12 : 11, style: 'fill:var(--ink-2)' }, mk, '');
+  this.mkText = LL.s('text', { x: 0, y: base - 70, 'text-anchor': 'middle', 'font-size': narrow ? 19 : 22, 'font-weight': 850, 'class': 't-big' }, mk, '');
+  this.mkHomes = LL.s('text', { x: 0, y: base - 54, 'text-anchor': 'middle', 'font-size': narrow ? 13 : 12, style: 'fill:var(--ink-2)' }, mk, '');
   this.mkX = null;
+  thr.forEach(function (t) { svg.appendChild(t); }); // the marker's stem passes behind the threshold names
   // the native range sits invisibly over the ruler, spanning 1 to 3,000 MW, so dragging moves the marker itself
   var r0 = x0 / W * 100, r1 = X(3000) / W * 100;
   this.range.style.left = 'calc(' + r0.toFixed(3) + '% - 12px)';
@@ -2039,7 +2064,7 @@ LL.Phantom = function (fig) {
     } : {
       pad: 16, tileW: 96, tileH: 32, gap: 8, per: 6, genY: [28], specY: [86], utilY: 186, utilW: 188, utilH: 70, barY: 318, barH: 40
     };
-    LL.s('text', { x: L.pad, y: (narrow ? 18 : 20), 'class': 't-muted', 'font-size': narrow ? 12 : 11, 'letter-spacing': 1 }, svg, 'DATA CENTER PROJECTS');
+    LL.s('text', { x: L.pad, y: (narrow ? 18 : 20), 'class': 't-muted', 'font-size': narrow ? 13.5 : 12, 'letter-spacing': 1 }, svg, 'DATA CENTER PROJECTS');
     var linkG = LL.s('g', {}, svg);
     var tiles = {};
     function tile(list, rows, spec) {
@@ -2055,15 +2080,15 @@ LL.Phantom = function (fig) {
     }
     tile(GEN, L.genY, false);
     tile(SPEC, L.specY, true);
-    var specLbl = LL.s('text', { x: L.pad, y: L.specY[0] - 9, 'class': 't-muted', 'font-size': narrow ? 12 : 11, 'letter-spacing': 0.8 }, svg, 'LONG SHOTS');
+    var specLbl = LL.s('text', { x: L.pad, y: L.specY[0] - 9, 'class': 't-muted', 'font-size': narrow ? 13.5 : 12, 'letter-spacing': 0.8 }, svg, 'LONG SHOTS');
     var utils = [];
     for (var u = 0; u < 3; u++) {
       var ux = L.pad + u * (L.utilW + (W - 2 * L.pad - 3 * L.utilW) / 2);
       var g = LL.s('g', { 'class': 'ph-util' }, svg);
       LL.s('rect', { x: ux, y: L.utilY, width: L.utilW, height: L.utilH, 'class': 'box' }, g);
-      LL.s('text', { x: ux + 10, y: L.utilY + 18, 'font-size': narrow ? 12 : 11, 'class': 't-muted', 'letter-spacing': 0.8 }, g, 'UTILITY ' + 'XYZ'[u]);
+      LL.s('text', { x: ux + 10, y: L.utilY + 18, 'font-size': narrow ? 13.5 : 12, 'class': 't-muted', 'letter-spacing': 0.8 }, g, 'UTILITY ' + 'XYZ'[u]);
       var mw = LL.s('text', { x: ux + 10, y: L.utilY + 42, 'font-size': narrow ? 19 : 21, 'class': 't-big' }, g, '0 MW');
-      var dup = LL.s('text', { x: ux + 10, y: L.utilY + 60, 'font-size': narrow ? 11.5 : 11, 'class': 't-ink' }, g, '');
+      var dup = LL.s('text', { x: ux + 10, y: L.utilY + 60, 'font-size': narrow ? 12.5 : 12, 'class': 't-ink' }, g, '');
       utils.push({ x: ux, mw: mw, dup: dup });
     }
     // links: one per (project, utility) pair; visibility set in update
@@ -2078,7 +2103,7 @@ LL.Phantom = function (fig) {
         links.push({ el: p, id: id, j: j, u: uIdx, mw: t.mw, spec: t.spec });
       }
     });
-    LL.s('text', { x: L.pad, y: L.barY - 12, 'class': 't-muted', 'font-size': narrow ? 12 : 11, 'letter-spacing': 1 }, svg, 'PLANNER’S FORECAST');
+    LL.s('text', { x: L.pad, y: L.barY - 12, 'class': 't-muted', 'font-size': narrow ? 13.5 : 12, 'letter-spacing': 1 }, svg, 'PLANNER’S FORECAST');
     var fcT = LL.s('text', { x: W - L.pad, y: L.barY - 10, 'text-anchor': 'end' }, svg);
     var fcV = LL.s('tspan', { 'class': 't-big', 'font-size': narrow ? 22 : 24 }, fcT, '');
     var fcX = LL.s('tspan', { 'class': 't-muted', 'font-size': narrow ? 12 : 12 }, fcT, '');
@@ -2089,17 +2114,17 @@ LL.Phantom = function (fig) {
     var segDup = LL.s('rect', { x: L.pad, y: L.barY + 1, width: 0, height: L.barH - 2, 'class': 'ph-seg dup' }, svg);
     var rx = L.pad + 2000 * sc;
     LL.s('line', { x1: rx, x2: rx, y1: L.barY - 6, y2: L.barY + L.barH + 8, 'class': 'ph-reality' }, svg);
-    LL.s('text', { x: rx + 6, y: L.barY + L.barH + 20, 'font-size': narrow ? 12 : 11.5, 'class': 't-ink' }, svg, '▲ REAL: 2,000 MW');
+    LL.s('text', { x: rx + 6, y: L.barY + L.barH + 20, 'font-size': narrow ? 13.5 : 12, 'class': 't-ink' }, svg, '▲ REAL: 2,000 MW');
     [0, 4000, 8000, 12000].forEach(function (v) {
       var x = L.pad + v * sc;
-      LL.s('text', { x: x, y: L.barY + L.barH + (narrow ? 44 : 40), 'font-size': narrow ? 11.5 : 10.5, 'class': 't-muted', 'text-anchor': v === 0 ? 'start' : (v === MAX ? 'end' : 'middle') }, svg, LL.fmt(v) + (v === MAX ? ' MW' : ''));
+      LL.s('text', { x: x, y: L.barY + L.barH + (narrow ? 44 : 40), 'font-size': narrow ? 13 : 12, 'class': 't-muted', 'text-anchor': v === 0 ? 'start' : (v === MAX ? 'end' : 'middle') }, svg, LL.fmt(v) + (v === MAX ? ' MW' : ''));
     });
     // legend
     var ly = L.barY + L.barH + (narrow ? 64 : 58), lx = L.pad;
     [['real', 'Real requests'], ['spec', 'Long shots'], ['dup', 'Hidden duplicates']].forEach(function (k, i) {
-      var gx = lx + (narrow ? [0, 122, 226] : [0, 190, 380])[i];
+      var gx = lx + (narrow ? [0, 132, 240] : [0, 190, 380])[i];
       LL.s('rect', { x: gx, y: ly - 9, width: 14, height: 10, 'class': 'ph-seg ' + k[0] }, svg);
-      LL.s('text', { x: gx + 20, y: ly, 'font-size': narrow ? 11.5 : 11, 'class': 't-ink' }, svg, k[1]);
+      LL.s('text', { x: gx + 20, y: ly, 'font-size': narrow ? 13 : 12, 'class': 't-ink' }, svg, k[1]);
     });
     self.g = { tiles: tiles, utils: utils, links: links, segReal: segReal, segSpec: segSpec, segDup: segDup, sc: sc, pad: L.pad, specLbl: specLbl, barH: L.barH, fcV: fcV, fcX: fcX, narrow: narrow };
     self.update(true);
@@ -2218,17 +2243,17 @@ LL.Heat.prototype.compute = function () {
 LL.Heat.prototype.build = function (narrow) {
   var self = this, box = this.chartBox;
   box.innerHTML = '';
-  var W = narrow ? 400 : 640, H = narrow ? 300 : 300;
-  var m = { l: narrow ? 46 : 58, r: 12, t: 16, b: 28 };
+  var W = narrow ? 400 : 640, H = narrow ? 236 : 300;
+  var m = { l: narrow ? 50 : 58, r: 12, t: 16, b: 28 };
   var svg = LL.s('svg', { 'class': 'hw-svg', viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Area chart of electricity demand over 24 hours against a 10,000 megawatt supply ceiling.' }, box);
   var Y = function (v) { return m.t + (H - m.t - m.b) * (1 - v / 12000); };
   var X = function (h) { return m.l + (W - m.l - m.r) * (h / 24); };
   [0, 4000, 8000, 12000].forEach(function (v) {
     LL.s('line', { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), 'class': 'grid-l' }, svg);
-    LL.s('text', { x: m.l - 6, y: Y(v) + 4, 'text-anchor': 'end', 'font-size': narrow ? 12 : 11, 'class': 't-muted' }, svg, (v / 1000) + (v ? ',000' : ''));
+    LL.s('text', { x: m.l - 6, y: Y(v) + 4, 'text-anchor': 'end', 'font-size': narrow ? 13 : 11.5, 'class': 't-muted' }, svg, (v / 1000) + (v ? ',000' : ''));
   });
   [[0, '12 AM'], [6, '6 AM'], [12, 'NOON'], [18, '6 PM'], [24, '12 AM']].forEach(function (t) {
-    LL.s('text', { x: X(t[0]), y: H - 8, 'text-anchor': t[0] === 0 ? 'start' : (t[0] === 24 ? 'end' : 'middle'), 'font-size': narrow ? 12 : 11, 'class': 't-muted' }, svg, t[1]);
+    LL.s('text', { x: X(t[0]), y: H - 8, 'text-anchor': t[0] === 0 ? 'start' : (t[0] === 24 ? 'end' : 'middle'), 'font-size': narrow ? 13 : 11.5, 'class': 't-muted' }, svg, t[1]);
   });
   this.p = {
     dc: LL.s('path', { 'class': 'dc-area' }, svg),
@@ -2236,12 +2261,12 @@ LL.Heat.prototype.build = function (narrow) {
     shed: LL.s('path', { 'class': 'shed-area' }, svg)
   };
   LL.s('line', { x1: m.l, x2: W - m.r, y1: Y(this.CAP), y2: Y(this.CAP), 'class': 'cap-line' }, svg);
-  LL.s('text', { x: m.l + 6, y: Y(this.CAP) - 7, 'font-size': narrow ? 12 : 11, 'class': 't-ink', 'letter-spacing': 0.5 }, svg, 'MOST THE GRID CAN SUPPLY · 10,000 MW');
+  LL.s('text', { x: m.l + 6, y: Y(this.CAP) - 7, 'font-size': narrow ? 13 : 11.5, 'class': 't-ink', 'letter-spacing': 0.5 }, svg, narrow ? 'GRID LIMIT · 10,000 MW' : 'MOST THE GRID CAN SUPPLY · 10,000 MW');
   // direct labels, placed on their areas in update()
   this.lab = {
-    base: LL.s('text', { x: X(1), 'font-size': narrow ? 12 : 11.5, 'class': 't-ink', 'letter-spacing': 0.5 }, svg, 'HOMES & BUSINESSES'),
-    dc: LL.s('text', { x: X(1), 'font-size': narrow ? 12 : 11.5, 'class': 't-on-signal', 'font-weight': 700, 'letter-spacing': 0.5 }, svg, 'DATA CENTERS'),
-    shed: LL.s('text', { 'font-size': narrow ? 12 : 11.5, 'text-anchor': 'end', 'font-weight': 700, 'letter-spacing': 0.5, style: 'fill:var(--shed)' }, svg, 'SHED')
+    base: LL.s('text', { x: X(1), 'font-size': narrow ? 13 : 12, 'class': 't-ink', 'letter-spacing': 0.5 }, svg, 'HOMES & BUSINESSES'),
+    dc: LL.s('text', { x: X(1), 'font-size': narrow ? 13 : 12, 'class': 't-on-signal', 'font-weight': 700, 'letter-spacing': 0.5 }, svg, 'DATA CENTERS'),
+    shed: LL.s('text', { 'font-size': narrow ? 13 : 12, 'text-anchor': 'end', 'font-weight': 700, 'letter-spacing': 0.5, style: 'fill:var(--shed)' }, svg, 'SHED')
   };
   var xh = LL.s('line', { y1: m.t, y2: H - m.b, x1: 0, x2: 0, 'class': 'xhair', style: 'display:none' }, svg);
   var hit = LL.s('rect', { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: 'transparent', tabindex: 0, 'aria-label': 'Hover or use arrow keys to read values by hour' }, svg);
@@ -2374,8 +2399,8 @@ LL.Hookup = function (root) {
   iso.box(ghost, 14.2, -1.8, 0, 8.4, 6.2, 1.9);
   newLine.classList.add('dio-layer');
   this.labels = LL.h('div', { 'class': 'dio-labels' }, scene);
-  var tag = LL.h('div', { 'class': 'dio-label dc-tag' }, this.labels, 'New line + substation work · $250M');
-  var dtag = this.dtag = LL.h('div', { 'class': 'dio-label' }, this.labels, 'Data center · 500 MW');
+  var tag = LL.h('div', { 'class': 'dio-label' }, this.labels, 'New line + substation work · $250M');
+  var dtag = this.dtag = LL.h('div', { 'class': 'dio-label dc-tag' }, this.labels, 'Data center · 500 MW');
   var stag = this.stag = LL.h('div', { 'class': 'dio-label shed-tag is-hidden' }, this.labels, 'Stranded: a line to no one');
   function place() {
     var r = scene.getBoundingClientRect(); if (!r.width) return;
@@ -2410,8 +2435,8 @@ LL.Hookup.prototype.update = function () {
   if (st.who === 'all') dcPaid = st.closes ? SHARE_AS_CUSTOMER * OPEN / YEARS : SHARE_AS_CUSTOMER;
   else dcPaid = st.closes && !st.term ? OPEN / YEARS : 1;
   var others = 1 - dcPaid;
-  this.sDC.style.flexGrow = Math.max(0.001, dcPaid);
-  this.sHome.style.flexGrow = Math.max(0.001, others);
+  this.sDC.style.flexGrow = dcPaid; this.sDC.style.display = dcPaid < 0.005 ? 'none' : '';
+  this.sHome.style.flexGrow = others; this.sHome.style.display = others < 0.005 ? 'none' : '';
   this.sDC.textContent = dcPaid > 0.12 ? 'Data center ' + Math.round(dcPaid * 100) + '%' : '';
   this.sHome.textContent = others > 0.12 ? 'Everyone else ' + Math.round(others * 100) + '%' : '';
   var per = others * COST / ACCTS;
@@ -2452,19 +2477,19 @@ LL.Hydro = function (root) {
   this.hdl = LL.s('rect', { x: x0 + 1, width: tw - 2, y: yb - this.RES * sc, height: 0, fill: 'var(--signal)' }, svg);
   this.over = LL.s('rect', { x: x0 + 1, width: tw - 2, y: yA, height: 0, fill: 'url(#hy-hatch)' }, svg);
   LL.s('line', { x1: x0 - 10, x2: x0 + tw + 10, y1: yA, y2: yA, stroke: 'var(--ink)', 'stroke-width': 2 }, svg);
-  LL.s('text', { x: x0 + tw + 14, y: yA - 2, 'font-size': 11, 'class': 't-ink' }, svg, 'CHEAP HYDRO');
-  LL.s('text', { x: x0 + tw + 14, y: yA + 12, 'font-size': 11, 'class': 't-ink' }, svg, 'ALLOCATION');
-  LL.s('text', { x: x0 + tw + 14, y: yA + 26, 'font-size': 10, 'class': 't-muted' }, svg, '100 MW · $30/MWh');
-  LL.s('text', { x: x0 + tw + 14, y: yb - 200 * sc + 4, 'font-size': 11, 'class': 't-ink' }, svg, 'MARKET POWER');
-  LL.s('text', { x: x0 + tw + 14, y: yb - 200 * sc + 18, 'font-size': 10, 'class': 't-muted' }, svg, '$90/MWh, 3× pricier');
-  this.resL = LL.s('text', { x: x0 + 10, y: yb - 14, 'font-size': 11, 'class': 't-ink' }, svg, 'RESIDENTS · 80 MW');
-  this.hdlL = LL.s('text', { x: x0 + 10, 'font-size': 11, 'class': 't-on-signal', 'font-weight': 700 }, svg, '');
+  LL.s('text', { x: x0 + tw + 14, y: yA - 2, 'font-size': 13, 'class': 't-ink' }, svg, 'CHEAP HYDRO');
+  LL.s('text', { x: x0 + tw + 14, y: yA + 12, 'font-size': 13, 'class': 't-ink' }, svg, 'ALLOCATION');
+  LL.s('text', { x: x0 + tw + 14, y: yA + 26, 'font-size': 13, 'class': 't-muted' }, svg, '100 MW · $30/MWh');
+  LL.s('text', { x: x0 + tw + 14, y: yb - 200 * sc + 4, 'font-size': 13, 'class': 't-ink' }, svg, 'MARKET POWER');
+  LL.s('text', { x: x0 + tw + 14, y: yb - 200 * sc + 18, 'font-size': 13, 'class': 't-muted' }, svg, '$90/MWh, 3× pricier');
+  this.resL = LL.s('text', { x: x0 + 10, y: yb - 14, 'font-size': 13, 'class': 't-ink' }, svg, 'RESIDENTS · 80 MW');
+  this.hdlL = LL.s('text', { x: x0 + 10, 'font-size': 13, 'class': 't-on-signal', 'font-weight': 700 }, svg, '');
   [0, 50, 100, 150, 200].forEach(function (v) {
     var y = yb - v * sc;
     LL.s('line', { x1: x0 - 6, x2: x0, y1: y, y2: y, stroke: 'var(--ink-3)' }, svg);
-    LL.s('text', { x: x0 - 10, y: y + 3.5, 'font-size': 10, 'text-anchor': 'end', 'class': 't-muted' }, svg, String(v));
+    LL.s('text', { x: x0 - 10, y: y + 4, 'font-size': 12.5, 'text-anchor': 'end', 'class': 't-muted' }, svg, String(v));
   });
-  LL.s('text', { x: x0 - 10, y: yb - 214 * sc, 'font-size': 10, 'text-anchor': 'end', 'class': 't-muted' }, svg, 'MW');
+  LL.s('text', { x: x0 - 10, y: yb - 214 * sc, 'font-size': 12.5, 'text-anchor': 'end', 'class': 't-muted' }, svg, 'MW');
   // controls
   var ctl = LL.h('div', { 'class': 'ctl' }, side);
   LL.h('label', { 'class': 'label', 'for': 'hy-load' }, ctl, 'New crypto mine or data center');
@@ -2516,7 +2541,7 @@ LL.CP = function (root) {
   LL.onLayout(host, 520, function (narrow) { self.build(host, narrow); });
 };
 LL.CP.prototype.build = function (host, narrow) {
-  var self = this, fs = narrow ? 12 : 11;
+  var self = this, fs = narrow ? 13 : 12;
   host.innerHTML = '';
   var W = narrow ? 360 : 640, H = narrow ? 220 : 230, m = { l: narrow ? 40 : 44, r: 8, t: 14, b: 26 };
   var svg = LL.s('svg', { 'class': 'cp-chart', viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Bar chart of the monthly peak demand interval, with the months counted for transmission cost allocation highlighted.' }, host);
@@ -2745,7 +2770,6 @@ LL.GLOSSARY = {
     d.label('q3', 'Who pays for the upgrades?', A.tx, 'q');
     d.label('q4', 'What happens in a heatwave?', A.homes, 'q');
     d.label('q5', 'Can it make its own power?', A.gens, 'q below');
-    d.label('ll', 'Large load', A.dc, 'dc-tag');
     var meter = $('#dio-meter'), wx = $('#dio-wx');
     var fillB = $('.meter__fill.basepart', meter), fillD = $('.meter__fill.dcpart', meter), slack = $('.meter__slack', meter), dem = $('[data-dem]', meter);
     function setMeter(base, dc) {
@@ -2764,7 +2788,7 @@ LL.GLOSSARY = {
       { dc: false, labels: [], view: 'full', meter: [8000, 0] },
       { dc: true, labels: ['dc'], view: 'dc', meter: [8000, 500] },
       { dc: true, labels: ['q1', 'q2', 'q3', 'q4', 'q5'], view: 'full', meter: [8000, 500] },
-      { dc: true, labels: ['ll'], view: 'dc', meter: false }
+      { dc: true, labels: [], view: 'dc', meter: false }
     ];
     var draw = !LL.reduceMotion();
     if (draw) { d.svg.classList.add('dio-draw'); setTimeout(function () { d.svg.classList.remove('dio-draw'); }, 2600); }
@@ -2846,7 +2870,7 @@ LL.GLOSSARY = {
     var now = new Date();
     (LL.TIMELINE || []).forEach(function (e) {
       var d = new Date(e.d + 'T12:00:00'), x = X(d);
-      var cls = 'tl__ev ' + e.st + (d > now ? ' future' : '') + (x > 82 ? ' right' : '');
+      var cls = 'tl__ev ' + e.st + (d > now ? ' future' : '') + (x > 82 || e.side === 'right' ? ' right' : '');
       var div = LL.h('div', { 'class': cls }, host, '<span class="dot"></span><span class="d">' + e.label + '</span><span class="e">' + e.t + '</span>');
       div.style.left = x + '%';
       var stem = (e.st === 'tx' ? 8 : 26) + (e.lane || 0) * 56;
@@ -2878,12 +2902,13 @@ LL.GLOSSARY = {
   function initQuiz() {
     var root = $('#quiz'); if (!root) return;
     var items = LL.QUIZ || [];
-    var score = $('#quiz-score'), sv = $('.v', score), msg = $('.msg', score);
+    var score = $('#quiz-score'), sv = $('.v', score), msg = $('.msg', score), reset = $('#quiz-reset');
     function build() {
       var right = 0, done = 0;
       root.innerHTML = '';
       sv.textContent = '0 / ' + items.length;
       msg.textContent = '';
+      reset.hidden = true;
       items.forEach(function (q, qi) {
         var box = LL.h('div', { 'class': 'qz' }, root);
         LL.h('p', { 'class': 'qz__q' }, box, q.q);
@@ -2895,6 +2920,7 @@ LL.GLOSSARY = {
             btns.forEach(function (x, xi) { x.disabled = true; if (xi === q.a) x.classList.add('right'); });
             if (oi !== q.a) b.classList.add('wrong'); else right++;
             done++;
+            reset.hidden = false;
             why.hidden = false;
             why.innerHTML = '<b>' + (oi === q.a ? 'Right. ' : 'Not quite. ') + '</b>' + q.why;
             sv.textContent = right + ' / ' + items.length;
@@ -2906,7 +2932,11 @@ LL.GLOSSARY = {
       root.appendChild(score);
     }
     build();
-    $('#quiz-reset').addEventListener('click', build);
+    reset.addEventListener('click', function () {
+      build();
+      root.scrollIntoView({ block: 'start' });
+      var first = $('.qz__opts button', root); if (first) first.focus({ preventScroll: true });
+    });
   }
 
   function initCopy() {
