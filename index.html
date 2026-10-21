@@ -226,16 +226,22 @@ em { font-style: italic; }
 .trip p { font-size: 0.96em; }
 .trip p + p { margin-top: 0.6em; }
 
-/* Statute decoder */
-.decoder { background: var(--ground-2); color: var(--ink-2); margin: 0.6em 0; }
-.decoder__top { padding: 14px 18px 0; font-family: var(--font-display); font-size: 0.82rem; color: var(--ink-3); }
-.decoder__top b { color: var(--ink); font-weight: 700; }
-.decoder__text { padding: 8px 18px 14px; font-family: var(--font-body); font-size: 0.96rem; line-height: 1.65; }
-/* phrases with a translation read like glossary terms: dotted underline, solid when chosen */
-.decoder__text mark { background: none; color: var(--ink); cursor: pointer; padding: 0 1px; border-bottom: 1.5px dotted var(--ink-3); }
-.decoder__text mark:hover, .decoder__text mark.is-active { background: color-mix(in srgb, var(--ink) 14%, transparent); border-bottom: 1.5px solid var(--ink); }
-.decoder__text mark:focus-visible { outline: 2px solid var(--ink); }
-.decoder__gloss { padding: 12px 18px 16px; background: var(--surface); color: var(--ink); font-family: var(--font-display); font-size: 1rem; font-weight: 600; line-height: 1.45; min-height: 4.4em; }
+/* Statute decoder: the law as a sheet of paper laid on the drawing, centered like an exhibit,
+   with highlighter on the phrases that have a translation */
+.prose > .decoder { align-self: center; width: 100%; max-width: 44rem; }
+.decoder { background: var(--paper); color: var(--paper-ink); box-shadow: var(--shadow); margin: 0.8em 0; }
+.decoder .decoder__title { font-size: var(--step-1); font-weight: 800; color: var(--paper-ink); padding: 18px 20px 0; margin: 0; }
+.decoder__top { padding: 16px 20px 0; font-family: var(--font-display); font-size: 0.82rem; color: var(--paper-ink-2); }
+.decoder__title + .decoder__top { padding-top: 6px; }
+.decoder__top b { color: var(--paper-ink); font-weight: 700; }
+.decoder__text { padding: 10px 20px 16px; font-family: var(--font-body); font-size: 0.98rem; line-height: 1.65; }
+.decoder__text mark {
+  background: linear-gradient(transparent 8%, var(--mark) 8%, var(--mark) 92%, transparent 92%);
+  color: inherit; cursor: pointer; padding: 0 1px; border-bottom: 1.5px solid #b48600;
+}
+.decoder__text mark:hover, .decoder__text mark.is-active { background: #f7c21a; }
+.decoder__text mark:focus-visible { outline: 2px solid var(--paper-ink); }
+.decoder__gloss { padding: 14px 20px 18px; background: #eef2fb; color: var(--paper-ink); font-family: var(--font-display); font-size: 1rem; font-weight: 600; line-height: 1.45; min-height: 4.4em; }
 
 /* Fix callout */
 .fix { margin-top: 0.8em; }
@@ -935,15 +941,15 @@ details.deep .deep__body { padding: 0 18px 20px; display: flex; flex-direction: 
   </div>
 
   <div class="prose" style="margin-top: clamp(32px, 5vw, 56px)">
-    <h3>Disclose duplicate requests</h3>
     <div class="decoder">
+      <h3 class="decoder__title">Disclose duplicate requests</h3>
       <div class="decoder__top"><span><b>Texas SB6</b> · §2 · Utilities Code §37.0561(d)</span></div>
       <div class="decoder__text">The standards must require each <mark data-gloss="A customer over the size threshold (75 MW by default) asking for a new or expanded connection.">large load customer subject to Subsection (c)</mark> to disclose to the <mark data-gloss="The utility the customer wants to connect to. In Texas that can be a private utility or a city-owned one.">interconnecting electric utility or municipally owned utility</mark> whether the customer is <mark data-gloss="Has the same project also applied for service somewhere else in Texas?">pursuing a substantially similar request for electric service in this state</mark> the approval of which would result in the customer <mark data-gloss="If the other request wins, this one would change or disappear. That is the working definition of a duplicate.">materially changing, delaying, or withdrawing the interconnection request</mark>. The disclosure <mark data-gloss="Developers can keep competitively sensitive specifics private. The point is to flag that a duplicate exists.">may withhold or anonymize competitively sensitive details</mark>.</div>
       <div class="decoder__gloss"><p></p></div>
     </div>
 
-    <h3>Require skin in the game</h3>
     <div class="decoder">
+      <h3 class="decoder__title">Require skin in the game</h3>
       <div class="decoder__top"><span><b>Texas SB6</b> · §2 · study fee, site control, financial commitment</span></div>
       <div class="decoder__text">
         <p>The standards must set a <mark data-gloss="Paid up front just to find out what connecting the project would take. Long shots are less likely to pay it.">flat study fee of at least $100,000</mark> to be paid to the interconnecting electric utility or municipally owned utility for <mark data-gloss="The utility’s first engineering look at whether the grid can serve the load and what upgrades it would need.">initial transmission screening studies</mark> for large loads subject to Subsection (c). A large load customer that <mark data-gloss="Ask for more power later, pay again.">requests additional capacity following the screening study must pay an additional study fee</mark> based on the new request.</p>
